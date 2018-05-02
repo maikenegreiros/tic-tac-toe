@@ -1,0 +1,58 @@
+.game-board {
+    display:  grid;
+    grid-template-columns:  100px 100px 100px;
+    width: 300px;
+    height: 300px;
+    margin: auto;
+}
+
+.cell {
+    border: 1px solid #ffffff;
+    position: relative;
+    background-color: #696969;
+}
+
+.cell::before,
+.cell::after {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0px 0px 5px 0px #000;
+}
+
+.xis::before {
+    content: "";
+    background: #ffa500;
+    width: 10px;
+    transform: rotate(45deg);
+    margin: 20px auto;
+}
+
+.xis::after {
+    content: "";
+    background: #ffa500;
+    width: 10px;
+    transform: rotate(135deg);
+    margin: 20px auto;
+}
+
+.circle::before {
+    content: "";
+    border-radius: 50%;
+    background-color: transparent;
+    background-color: #00ffa5;
+    margin: 20px;
+}
+
+.circle::after {
+    content: "";
+    background-color: #696969;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    margin: auto;
+    box-shadow: 0px 0px 5px 0px #000 inset;
+}
