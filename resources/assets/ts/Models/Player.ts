@@ -1,5 +1,4 @@
 import {Marker} from "../Enums/Marker"
-
 export class Player
 {
     private nickname: string
@@ -9,5 +8,10 @@ export class Player
     {
         this.nickname = nickname
         this.marker = marker
+    }
+
+    public getMarker(): Marker
+    {
+        return this.marker
     }
 }
