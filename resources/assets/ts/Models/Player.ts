@@ -14,4 +14,9 @@ export class Player
     {
         return this.marker
     }
+
+    public getNickName(): string
+    {
+        return this.nickname
+    }
 }
