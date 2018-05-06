@@ -2,21 +2,35 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Tic Tac Toe</title>
         <script src="public/js/main-bundle.js" charset="utf-8"></script>
         <link rel="stylesheet" href="public/css/style.css">
     </head>
     <body>
-        <div class="game-board">
-            <button class="cell cell-1" data-position="0-0"></button>
-            <button class="cell cell-2" data-position="0-1"></button>
-            <button class="cell cell-3" data-position="0-2"></button>
-            <button class="cell cell-4" data-position="1-0"></button>
-            <button class="cell cell-5" data-position="1-1"></button>
-            <button class="cell cell-6" data-position="1-2"></button>
-            <button class="cell cell-7" data-position="2-0"></button>
-            <button class="cell cell-8" data-position="2-1"></button>
-            <button class="cell cell-9" data-position="2-2"></button>
+        <h1>Tic Tac Toe</h1>
+        <div class="player-turn" style="display:none;"></div>
+        <div id="app">
+            <div class="choose-marker-container">
+                <p>Player 1, would you like <span class="text-marker">X</span> or <span class="text-marker">O</span></p>
+                <div class="buttons-choose-container">
+                    <button data-marker="xis" class="button-choose-marker button-choose-xis" type="button" name="button">X</button>
+                    <button data-marker="circle" class="button-choose-marker button-choose-circle" type="button" name="button">O</button>
+                </div>
+            </div>
+            <div class="game-board-container">
+                <div class="game-board">
+                    <button class="cell cell-1" data-position="0-0"></button>
+                    <button class="cell cell-2" data-position="0-1"></button>
+                    <button class="cell cell-3" data-position="0-2"></button>
+                    <button class="cell cell-4" data-position="1-0"></button>
+                    <button class="cell cell-5" data-position="1-1"></button>
+                    <button class="cell cell-6" data-position="1-2"></button>
+                    <button class="cell cell-7" data-position="2-0"></button>
+                    <button class="cell cell-8" data-position="2-1"></button>
+                    <button class="cell cell-9" data-position="2-2"></button>
+                </div>
+            </div>
         </div>
     </body>
 </html>
