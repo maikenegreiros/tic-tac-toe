@@ -4,21 +4,21 @@ import {Subject} from "./../../../../node_modules/ts-observer-pattern/Subject"
 
 export class Board extends Subject
 {
-    private buttons: NodeListOf<HTMLButtonElement>
     private xClass: string
     private circleClass: string
+    private board: HTMLElement
 
-    public constructor(buttons: NodeListOf<HTMLButtonElement>)
+    public constructor(board: HTMLElement)
     {
         super()
-        this.buttons = buttons
+        this.board = board
         this.xClass = "xis"
         this.circleClass = "circle"
     }
 
-    public getButtons(): NodeListOf<HTMLButtonElement>
+    public getBoard(): HTMLElement
     {
-        return this.buttons
+        return this.board
     }
 
     public mark(player: Player, button: HTMLButtonElement): void
