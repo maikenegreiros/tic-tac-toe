@@ -1,5 +1,5 @@
 export enum Marker
 {
-    Xis = 1,
-    Circle = 2
+    Xis = "xis",
+    Circle = "circle"
 }
