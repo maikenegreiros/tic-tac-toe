@@ -4,8 +4,9 @@ import {TicTacToeView} from "../Views/TicTacToeView"
 import {Players} from "../Interfaces/Players"
 import {Player} from "../Models/Player"
 import {Observer} from "./../../../../node_modules/ts-observer-pattern/Observer"
+import {Subject} from "./../../../../node_modules/ts-observer-pattern/Subject"
 
-export class TicTacToe implements Observer
+export class TicTacToe extends Subject implements Observer
 {
     private players: Players;
     private board: Board;
@@ -16,6 +17,7 @@ export class TicTacToe implements Observer
 
     public constructor(players: Players, board: Board, view: TicTacToeView)
     {
+        super()
         this.players = players
         this.board = board
         this.view = view
@@ -32,8 +34,13 @@ export class TicTacToe implements Observer
         this.board.getBoard().addEventListener("click", e => {
             let button = <HTMLButtonElement> e.target
             this.board.mark(this.currentPlayer, button)
-            this.update(button)
-            this.exchangeTurns()
+
+            // Esse setTimeout será desnecessário depois que
+            // eu fizer a apresentação do resultado sem o alert
+            setTimeout(() => {
+                this.update(button)
+                this.exchangeTurns()
+            }, 100)
         })
     }
 
@@ -50,6 +57,13 @@ export class TicTacToe implements Observer
     public setcurrentPlayer(player: Player): void
     {
         this.currentPlayer = player
+        let next = this.currentPlayer === this.players.player1
+        ? this.players.player2
+        : this.players.player1
+        this.notify({
+            current: this.currentPlayer.getMarker(),
+            next: next.getMarker()
+        })
         this.view.update(this.currentPlayer)
     }
 
@@ -64,6 +78,14 @@ export class TicTacToe implements Observer
 
     private verify(): void
     {
+        if (!this.boardVectors
+            .reduce((pre,cur) => pre.concat(cur),[])
+            .some(cell => typeof cell === "number")
+        ) {
+            this.finishGame("That was a draw")
+            return
+        }
+
         //Horizontals
         for (let i = 0; i < 3; i++) {
             this.areEqual(this.boardVectors[i])
@@ -100,7 +122,6 @@ export class TicTacToe implements Observer
                 this.finishGame(`${this.players.player2.getNickName()} wins`)
             }
         }
-        //Aqui eu tenho que fazer uma condição para quando ninguem ganhar
     }
 
     private finishGame(text: string): void
@@ -116,8 +137,7 @@ export class TicTacToe implements Observer
             [ NaN, NaN, NaN ],
             [ NaN, NaN, NaN ]
         ]
-        this.board.getBoard().addEventListener("click", e => {
-            let button = <HTMLButtonElement> e.target
+        Array.prototype.forEach.call(this.board.getButtons(), button => {
             button.disabled = false
             button.classList.remove(this.board.getXClass())
             button.classList.remove(this.board.getCircleClass())
