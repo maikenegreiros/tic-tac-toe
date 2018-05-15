@@ -16,6 +16,8 @@ export class TicTacToeView
     {
         let playerTurnNode = document.querySelector(this.playerTurnSelector)
         playerTurnNode.innerHTML = `<p>${data.getNickName()}'s turn</p>`
+        playerTurnNode.className = "player-turn"
+        playerTurnNode.classList.add(data.getMarker())
         return this
     }
 }
