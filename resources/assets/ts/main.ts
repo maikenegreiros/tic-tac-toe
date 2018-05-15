@@ -5,6 +5,8 @@ import {Board} from "./Models/Board"
 import {Marker} from "./Enums/Marker"
 
 window.addEventListener("DOMContentLoaded", () => {
+    let buttons = <NodeListOf<HTMLButtonElement>> document.querySelectorAll(".cell")
+    let boardContainer = <HTMLElement> document.querySelector(".game-board-container")
     let boardNode = <HTMLElement> document.querySelector(".game-board")
     let buttonsSelectMarker = <NodeListOf<HTMLButtonElement>> document.querySelectorAll(".button-choose-marker")
 
@@ -31,9 +33,10 @@ window.addEventListener("DOMContentLoaded", () => {
                 player2
             }
 
-            let board = new Board(boardNode)
+            let board = new Board(boardContainer, boardNode, buttons)
             let view = new TicTacToeView
             let game = new TicTacToe(players, board, view)
+            game.attach(board)
             game.setcurrentPlayer(player1)
         })
     })
