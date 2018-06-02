@@ -1,13 +1,25 @@
-import {Player} from "./Player"
+import {IScoreboard} from "../Interfaces/IScoreboard"
 
 export class Scoreboard
 {
-    private player1: Player
-    private player2: Player
+    private scoreboard: IScoreboard
 
-    public constructor(player1: Player, player2: Player)
+    public constructor()
     {
-        this.player1 = player1
-        this.player2 = player2
+        this.scoreboard = {
+            player1: 0,
+            player2: 0
+        }
+    }
+
+    public update(data: IScoreboard): this
+    {
+        this.scoreboard = data
+        return this
+    }
+
+    public getScoreboard(): IScoreboard
+    {
+        return this.scoreboard
     }
 }
