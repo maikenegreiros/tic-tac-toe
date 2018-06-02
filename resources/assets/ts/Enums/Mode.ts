@@ -1,5 +1,5 @@
 export enum Mode
 {
-    OnePlayer = "One Player",
-    TwoPlayers = "Two players"
+    OnePlayer = "oneplayer",
+    Multiplayer = "multiplayer"
 }
