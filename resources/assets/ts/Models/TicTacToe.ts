@@ -1,8 +1,10 @@
 import {Marker} from "../Enums/Marker"
-import {Board} from "../Models/Board"
+import {Mode} from "../Enums/Mode"
+import {Board} from "../Views/Board"
 import {TicTacToeView} from "../Views/TicTacToeView"
 import {Players} from "../Interfaces/Players"
 import {Player} from "../Models/Player"
+import {Computer} from "../Models/Computer"
 import {Observer} from "./../../../../node_modules/ts-observer-pattern/Observer"
 import {Subject} from "./../../../../node_modules/ts-observer-pattern/Subject"
 
@@ -14,13 +16,24 @@ export class TicTacToe extends Subject implements Observer
     private Markers: Marker
     private currentPlayer: Player
     private view: TicTacToeView
+    private mode: Mode
+    private computer: Computer
+    private ended: boolean
+    private resultContainer: HTMLElement
 
-    public constructor(players: Players, board: Board, view: TicTacToeView)
+    public constructor(players: Players, board: Board, view: TicTacToeView, mode: Mode)
     {
         super()
         this.players = players
         this.board = board
         this.view = view
+        this.mode = mode
+        this.ended = false
+        this.resultContainer = document.createElement("div")
+        this.resultContainer.classList.add("result-container")
+        if (this.mode === Mode.OnePlayer) {
+            this.computer = new Computer;
+        }
         this.boardVectors = [
             [ NaN, NaN, NaN ],
             [ NaN, NaN, NaN ],
@@ -35,12 +48,8 @@ export class TicTacToe extends Subject implements Observer
             let button = <HTMLButtonElement> e.target
             this.board.mark(this.currentPlayer, button)
 
-            // Esse setTimeout será desnecessário depois que
-            // eu fizer a apresentação do resultado sem o alert
-            setTimeout(() => {
-                this.update(button)
-                this.exchangeTurns()
-            }, 100)
+            this.update(button)
+            this.exchangeTurns()
         })
     }
 
@@ -67,7 +76,12 @@ export class TicTacToe extends Subject implements Observer
         this.view.update(this.currentPlayer)
     }
 
-    private exchangeTurns(): void
+    public getCurrentPlayer(): Player
+    {
+        return this.currentPlayer
+    }
+
+    public exchangeTurns(): void
     {
         if (this.currentPlayer === this.players.player1) {
             this.setcurrentPlayer(this.players.player2)
@@ -83,6 +97,7 @@ export class TicTacToe extends Subject implements Observer
             .some(cell => typeof cell === "number")
         ) {
             this.finishGame("That was a draw")
+            this.ended = true
             return
         }
 
@@ -118,16 +133,36 @@ export class TicTacToe extends Subject implements Observer
         if (params[0][0] === params[0][1] && params[0][1] === params[0][2]) {
             if (this.players.player1.getMarker() === params[0][0]) {
                 this.finishGame(`${this.players.player1.getNickName()} wins`)
+                this.ended = true
             } else {
                 this.finishGame(`${this.players.player2.getNickName()} wins`)
+                this.ended = true
             }
+        } else {
+            console.log(this.currentPlayer)
+            // Checa se é a vez do computador para ele então jogar
+            setTimeout(() => {
+                if (this.mode === Mode.OnePlayer
+                    && this.currentPlayer === this.players.player2
+                    && !this.ended) {
+                    this.computer.play(this, this.board)
+                };
+            },1000)
         }
     }
 
     private finishGame(text: string): void
     {
-        alert(text)
+        this.showResult(text)
         setTimeout(this.resetGame.bind(this), 2000)
+    }
+
+    private showResult(text: string): void
+    {
+        const container = document.querySelector("#app")
+        container.appendChild(this.resultContainer)
+        this.resultContainer.innerHTML = `<p>${text}</p>`
+        this.resultContainer.classList.remove("hidden")
     }
 
     private resetGame(): void
@@ -142,5 +177,8 @@ export class TicTacToe extends Subject implements Observer
             button.classList.remove(this.board.getXClass())
             button.classList.remove(this.board.getCircleClass())
         })
+        this.ended = false
+        this.resultContainer.classList.add("hidden")
+        this.verify()
     }
 }
